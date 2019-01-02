@@ -31,6 +31,11 @@ public static class ParseFishPath {
         //FileStream fsSource = new FileStream(strFileName, FileMode.Open, FileAccess.Read);
         //TextAsset值读取后缀名为txt问题件，Resources.Load输入文件名不包含后缀名
         TextAsset infoAssets = Resources.Load<TextAsset>(strFileName);
+        if(infoAssets == null)
+        {
+            Debug.Log("OpenFile:" + strFileName + "  failed!");
+            return null;
+        }
         string str = infoAssets.text;
 
         //69.0,740.0,0,

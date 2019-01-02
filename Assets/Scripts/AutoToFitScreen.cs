@@ -12,7 +12,6 @@ public class AutoToFitScreen : MonoBehaviour {
     }
     void Start () {
 
-        Debug.Log("=====!");
         Vector3 scale = transform.localScale;
         float cameraheight = Camera.main.orthographicSize * 2;
         float camerawidth = cameraheight * Camera.main.aspect;
@@ -28,7 +27,6 @@ public class AutoToFitScreen : MonoBehaviour {
         
         transform.localScale = scale;
         transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
-        Debug.Log("=====2");
     }
 	
 	// Update is called once per frame

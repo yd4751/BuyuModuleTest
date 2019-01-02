@@ -8,89 +8,96 @@ public class FishMove : MonoBehaviour {
     
     public float Speed;
     public float turnSpeed;
-    private bool bCanMove = false;
-    private int nCurPos = 0;
-    private PathPointInfo curPosInfo;
 
-    Vector3 lastPos;
+    private int nCurPos = 0;
+    public int nPathType = 0;
+    private PathPointInfo curPosInfo;
+    private bool bInitDone = false;
+    private int id = -1;
+
+    Vector3 vNextPos;
     void Start ()
     {
-        bCanMove = UpdatePosInfo();
-        lastPos = new Vector3(curPosInfo.x, curPosInfo.y, 0);
-        lastPos = Camera.main.ScreenToWorldPoint(lastPos);
-        lastPos.z = transform.position.z;
-        transform.position = lastPos;
+        vNextPos = Vector3.zero;
+        ResetData();
     }
-	
+    private void ResetData()
+    {
+        nCurPos = 0;
+        GetNextPos();
+        transform.position = vNextPos;
+
+        GetNextPos();
+    }
+    public void Init(int number, int pathType)
+    {
+        id = number;
+        nPathType = pathType;
+        ResetData();
+        bInitDone = true;
+    }
+    public int GetID()
+    {
+        return id;
+    }
+    void GetNextPos()
+    {
+        if (!SharedInfo.InitDone()) return;
+
+        UpdatePosInfo();
+        vNextPos = new Vector3(curPosInfo.x, curPosInfo.y, 0);
+        vNextPos = Camera.main.ScreenToWorldPoint(vNextPos);
+        vNextPos.z = transform.position.z;
+
+        Vector3 curDirction = vNextPos - transform.position;
+        float angle = Mathf.Atan2(curDirction.y, curDirction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+    }
 	// Update is called once per frame
 	void Update ()
     {
-        Debug.Log("xxxx:" + transform.hasChanged);
-        if (transform.hasChanged)
+        if (bInitDone)
         {
-            bCanMove = UpdatePosInfo();
-            lastPos = new Vector3(curPosInfo.x, curPosInfo.y, 0);
-            lastPos = Camera.main.ScreenToWorldPoint(lastPos);
-            lastPos.z = transform.position.z;
-        }
-        
-        if (bCanMove)
-        {
+            Vector3 vBefore = transform.position;
             //插值移动
-            //Vector3 curDirction = lastPos - transform.position;
-            //transform.Translate(curDirction * Time.deltaTime);
-            transform.position = lastPos;
+            Vector3 curDirction = vNextPos - transform.position;
+            transform.Translate(curDirction * Time.deltaTime * Speed, Space.World);
 
-            //获得方向
-            //Vector3 direc = lastPos - transform.position;
-            //direc.z = 0;// transform.position.z;
-            //绝对朝向
-            // transform.right = direc;
-
-            //Debug.Log(" Cur:" + transform.position.ToString());
+            Vector3 changeInfo = transform.position - vBefore;
+            if (changeInfo.x < Time.deltaTime * Speed && changeInfo.y < Time.deltaTime * Speed)
+            {
+                // Debug.Log(transform.position.ToString() + ":" + vNextPos.ToString() + " : " + (transform.position - vBefore).ToString());
+                GetNextPos();
+            }
         }
-        //LookAtMouse();
+   
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-        bCanMove = false;
-        Debug.Log("OnTrigger :" + other.name);
-        //销毁
-        Destroy(other.gameObject);
+        if(other.tag == "bullet")
+        {
+            Debug.Log("get bullet!");
+            Destroy(other.gameObject);
+            //10概率死亡
+            if (Random.Range(0, 100) < 10)
+            {
+                Camera.main.SendMessage("OnFishDie", this.gameObject);
+            }
+        }
     }
 
     bool UpdatePosInfo()
     {
-        if (nCurPos >= SharedInfo.defaultPathInfo.Length)
+        if (nCurPos >= SharedInfo.GetTargetPathSize(nPathType))
         {
+            ResetData();
             return false;
         }
 
-        curPosInfo = SharedInfo.defaultPathInfo[nCurPos];
+        curPosInfo = SharedInfo.GetTargetPathPosInfo(nPathType, nCurPos);
         ++nCurPos;
         return true;
     }
-    void LookAtMouse()
-    {
-        Vector3 ptStart = new Vector3(0, 540, 10);
-        Vector3 ptEnd = new Vector3(1920, 540, 10);
-        Vector3 millLine = Camera.main.ScreenToWorldPoint(ptEnd) - Camera.main.ScreenToWorldPoint(ptStart);
-        Debug.DrawLine(Camera.main.ScreenToWorldPoint(ptStart), Camera.main.ScreenToWorldPoint(ptEnd), Color.red);
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector3 newDirect = Input.mousePosition;// - Vector3.zero;  //也是按原点计算的夹角
-            newDirect.z = 0;
-            millLine.z = 0;
-            //newDirect.Normalize();
-
-            //float target = Mathf.Atan2(newDirect.y, newDirect.x) * Mathf.Rad2Deg;
-            float target = Vector3.Angle(millLine, Camera.main.ScreenToWorldPoint(newDirect));
-            //Debug.Log("Test:" + target);
-            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, 0, target), turnSpeed * Time.deltaTime);
-            transform.Rotate(new Vector3(0, 0, 30 * turnSpeed));
-            //Mathf.
-        }
-    }
 }
 
