@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class cannon : MonoBehaviour {
 
@@ -40,11 +41,18 @@ public class cannon : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    if(Input.GetMouseButtonDown(0))
+        if (EventSystem.current.currentSelectedGameObject == null)
         {
-            bStartGenerateBullet = true;
+            if (Input.GetMouseButtonDown(0))
+            {
+                bStartGenerateBullet = true;
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                StopGenerateBullet();
+            }
         }
-        if(Input.GetMouseButtonUp(0))
+        else
         {
             StopGenerateBullet();
         }
@@ -74,7 +82,7 @@ public class cannon : MonoBehaviour {
             return;
         }
 
-        GameObject newBullet = GameObject.Instantiate(prefbBullet, objBullet.position, objBullet.rotation);
+        GameObject.Instantiate(prefbBullet, objBullet.position, objBullet.rotation);
         nLastGenerateTime = 0;
     }
     

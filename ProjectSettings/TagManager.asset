@@ -51,3 +51,9 @@ TagManager:
   - name: cannon
     uniqueID: 3564638919
     locked: 0
+  - name: web
+    uniqueID: 955180955
+    locked: 0
+  - name: gold
+    uniqueID: 2139228365
+    locked: 0

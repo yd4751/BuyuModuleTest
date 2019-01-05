@@ -33,6 +33,8 @@ public class FishMove : MonoBehaviour {
     {
         id = number;
         nPathType = pathType;
+        //设置渲染层级
+        GetComponent<SpriteRenderer>().sortingOrder = id;
         ResetData();
         bInitDone = true;
     }
@@ -58,12 +60,14 @@ public class FishMove : MonoBehaviour {
     {
         if (bInitDone)
         {
-            Vector3 vBefore = transform.position;
+            //Vector3 vBefore = transform.position;
             //插值移动
             Vector3 curDirction = vNextPos - transform.position;
-            transform.Translate(curDirction * Time.deltaTime * Speed, Space.World);
+            //transform.Translate(curDirction * Time.deltaTime * Speed, Space.World);
+            //匀速移动
+            transform.Translate(curDirction.normalized*Time.deltaTime * Speed, Space.World);
 
-            Vector3 changeInfo = transform.position - vBefore;
+            Vector3 changeInfo = curDirction;
             if (changeInfo.x < Time.deltaTime * Speed && changeInfo.y < Time.deltaTime * Speed)
             {
                 // Debug.Log(transform.position.ToString() + ":" + vNextPos.ToString() + " : " + (transform.position - vBefore).ToString());
@@ -76,7 +80,8 @@ public class FishMove : MonoBehaviour {
     {
         if(other.tag == "bullet")
         {
-            Debug.Log("get bullet!");
+            //Debug.Log("get bullet!");
+            Camera.main.SendMessage("OnPlayWeb", other.gameObject);
             Destroy(other.gameObject);
             //10概率死亡
             if (Random.Range(0, 100) < 10)

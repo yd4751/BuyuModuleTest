@@ -7,6 +7,8 @@ public class Main : MonoBehaviour {
     private float nGenerateTimeSep = 0.5f;
     private float nLastGenerateTime = 0f;
     private List<GameObject> allPrefabFishs;
+    private GameObject web;
+    private GameObject gold;
     private Dictionary<int,GameObject> allFishs;
     private int nCurFishID = 0;
     private int nMaxFishCount = 30;
@@ -15,6 +17,7 @@ public class Main : MonoBehaviour {
         allPrefabFishs = new List<GameObject>();
         allFishs = new Dictionary<int, GameObject>();
         Init();
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
  
 	// Update is called once per frame
@@ -54,6 +57,11 @@ public class Main : MonoBehaviour {
         allPrefabFishs.Add(Resources.Load("Prefabs/SilverFish") as GameObject);
         //乌龟
         allPrefabFishs.Add(Resources.Load("Prefabs/Turtle") as GameObject);
+        //鱼网
+        web = Resources.Load("Prefabs/web") as GameObject;
+        //金币
+        gold = Resources.Load("Prefabs/gold") as GameObject;
+
     }
     void GenerateFish()
     {
@@ -68,7 +76,18 @@ public class Main : MonoBehaviour {
     {
         int fishID = fish.GetComponent<FishMove>().GetID();
         Debug.Log("fish die! " + fishID);
+        
+        int nCout = Random.Range(1, 5);
+        for(int i=0;i<nCout; i++)
+            GameObject.Instantiate<GameObject>(gold, allFishs[fishID].transform.position, Quaternion.identity, this.transform);
+
         Destroy(allFishs[fishID]);
         allFishs.Remove(fishID);
+        
+    }
+    void OnPlayWeb(GameObject bullet)
+    {
+        GameObject.Instantiate<GameObject>(web, bullet.transform.position, Quaternion.identity, this.transform);
     }
 }
+

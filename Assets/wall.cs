@@ -26,7 +26,7 @@ public class wall : MonoBehaviour {
     {
         if (collision.tag == "bullet")
         {
-            Debug.Log(collision.name);
+            //Debug.Log(collision.name);
             collision.gameObject.GetComponent<bullet>().StopMove();
             ReachScreenBoder(collision.gameObject);
             collision.gameObject.GetComponent<bullet>().StartMove();
@@ -62,7 +62,7 @@ public class wall : MonoBehaviour {
  
     void OnTouchRight(GameObject wall,GameObject collision)
     {
-        Debug.Log("OnTouchRight");
+        //Debug.Log("OnTouchRight");
         float angle = 0;
         Transform target = wall.transform;
         Transform changeObject = collision.transform;
@@ -84,7 +84,7 @@ public class wall : MonoBehaviour {
     }
     void OnTouchLeft(GameObject wall, GameObject collision)
     {
-        Debug.Log("OnTouchLeft");
+        //Debug.Log("OnTouchLeft");
         float angle = 0;
         Transform target = wall.transform;
         Transform changeObject = collision.transform;
@@ -106,7 +106,7 @@ public class wall : MonoBehaviour {
     }
     void OnTouchTop(GameObject wall, GameObject collision)
     {
-        Debug.Log("OnTouchTop");
+        //Debug.Log("OnTouchTop");
         float angle = 0;
         Transform target = wall.transform;
         Transform changeObject = collision.transform;
@@ -128,7 +128,7 @@ public class wall : MonoBehaviour {
     }
     void OnTouchBottom(GameObject wall, GameObject collision)
     {
-        Debug.Log("OnTouchBottom");
+        //Debug.Log("OnTouchBottom");
         float angle = 0;
         Transform target = wall.transform;
         Transform changeObject = collision.transform;
