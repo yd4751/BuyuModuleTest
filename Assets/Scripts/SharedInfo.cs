@@ -18,7 +18,7 @@ public static class SharedInfo{
             PathPointInfo[] cur = ParseFishPath.Parse("path" + i);
             if (cur != null)
             {
-                Debug.Log("GetPathLen:" + cur.Length);
+                //Debug.Log("GetPathLen:" + cur.Length);
                 allPathList.Add(cur);
             }
         }

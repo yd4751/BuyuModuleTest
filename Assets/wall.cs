@@ -20,7 +20,7 @@ public class wall : MonoBehaviour {
         vRightTop = new Vector3(nWidth + vLeftBottom.x, nHeight + vLeftBottom.y, vLeftBottom.z);
         vLeftBottom = Camera.main.ScreenToWorldPoint(vLeftBottom);
         vRightTop = Camera.main.ScreenToWorldPoint(vRightTop);
-        Debug.Log(vLeftBottom.ToString() + "  : " + vRightTop.ToString());
+        //Debug.Log(vLeftBottom.ToString() + "  : " + vRightTop.ToString());
     }
     private void OnTriggerExit2D(Collider2D collision)
     {

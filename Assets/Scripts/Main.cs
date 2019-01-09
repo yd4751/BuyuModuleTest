@@ -75,12 +75,13 @@ public class Main : MonoBehaviour {
     void OnFishDie(GameObject fish)
     {
         int fishID = fish.GetComponent<FishMove>().GetID();
-        Debug.Log("fish die! " + fishID);
+        //Debug.Log("fish die! " + fishID);
         
         int nCout = Random.Range(1, 5);
         for(int i=0;i<nCout; i++)
             GameObject.Instantiate<GameObject>(gold, allFishs[fishID].transform.position, Quaternion.identity, this.transform);
 
+        //CNetWork.NetWork.SendFishDie();
         Destroy(allFishs[fishID]);
         allFishs.Remove(fishID);
         

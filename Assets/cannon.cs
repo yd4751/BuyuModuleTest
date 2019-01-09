@@ -83,6 +83,7 @@ public class cannon : MonoBehaviour {
         }
 
         GameObject.Instantiate(prefbBullet, objBullet.position, objBullet.rotation);
+        CNetWork.NetWork.SendFire();
         nLastGenerateTime = 0;
     }
     

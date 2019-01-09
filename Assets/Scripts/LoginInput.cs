@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-public class LoginInput : MonoBehaviour {
+
+
+public class LoginInput : MonoBehaviour
+{
 
     public GameObject inputAccount;
     public GameObject inputPassword;
@@ -14,21 +17,23 @@ public class LoginInput : MonoBehaviour {
     private string password;
     private float delayNotifyTime = 3;
     private float nStartTime = 0;
-    void Start () {
+    void Start()
+    {
         Screen.orientation = ScreenOrientation.Portrait;
     }
-	
-	// Update is called once per frame
-	void Update () {
-		if(nStartTime > 0)
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (nStartTime > 0)
         {
             nStartTime -= Time.deltaTime;
-            if(nStartTime <=0)
+            if (nStartTime <= 0)
             {
                 notifyInfo.GetComponent<Text>().text = "";
             }
         }
-	}
+    }
 
     public void OnAccountEndInput()
     {
@@ -43,7 +48,7 @@ public class LoginInput : MonoBehaviour {
     }
     public void OnLogin()
     {
-        if(account == null)
+        if (account == null)
         {
             notifyInfo.GetComponent<Text>().text = "无效账户";
             nStartTime = delayNotifyTime;
@@ -55,6 +60,8 @@ public class LoginInput : MonoBehaviour {
             nStartTime = delayNotifyTime;
             return;
         }
+
+        CNetWork.NetWork.SendLoginRequest(account, password);
 
         notifyInfo.GetComponent<Text>().text = "即将进入游戏，请等待...";
         nStartTime = delayNotifyTime;
